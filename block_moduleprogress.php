@@ -184,7 +184,7 @@ class block_moduleprogress extends block_base {
                         <div class="mp-overlay mp-overlay-dark" style="border-radius: 16px;">
                             <div style="max-width: 650px;">
                                 <span class="mp-badge-tag">Dozenten-Info: Kohorten-Ranking</span>
-                                <p class="small text-white mb-0">Anonymisierte Platzierungsliste. Es werden <b>ausschließlich Teilnehmende</b> gewertet und oben rechts getrackt. Dozierende und Admins verfälschen das Ranking nicht mehr.</p>
+                                <p class="small text-white mb-0">Anonymisierte Platzierungsliste. Es werden <b> Teilnehmende</b> anonym gewertet und oben rechts getrackt.</p>
                             </div>
                         </div>' : '') . '
 
