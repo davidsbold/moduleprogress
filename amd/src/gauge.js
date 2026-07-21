@@ -81,3 +81,25 @@ define([], function() {
         }
     };
 });
+
+define(['jquery'], function($) {
+    return {
+        initToggle: function() {
+            $('#toggle-block-btn').on('click', function() {
+                var $content = $('#moduleprogress-content-body');
+                var $icon = $(this).find('.toggle-icon');
+                var $text = $(this).find('.toggle-text');
+
+                $content.slideToggle(300, function() {
+                    if ($content.is(':visible')) {
+                        $text.text('Modulfortschritt ausblenden');
+                        $icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                    } else {
+                        $text.text('Modulfortschritt einblenden');
+                        $icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                    }
+                });
+            });
+        }
+    };
+});
