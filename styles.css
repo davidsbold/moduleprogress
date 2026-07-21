@@ -1,0 +1,370 @@
+:root {
+    --moduleprogress-navy: #06133D;
+    --moduleprogress-yellow: #FFF04A;
+    --moduleprogress-text: #06133D;
+    --moduleprogress-muted: #4B5563;
+    --moduleprogress-border: #E4E7EC;
+    --moduleprogress-grey: #D9DDE3;
+    --moduleprogress-bg: #FFFFFF;
+    --moduleprogress-soft: #F8F9FB;
+}
+
+.moduleprogress-widget {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--moduleprogress-text);
+    background: var(--moduleprogress-bg);
+    border: 1px solid var(--moduleprogress-border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: grid;
+    grid-template-columns: 320px 1fr 280px;
+    gap: 22px;
+    align-items: center;
+    box-shadow: 0 6px 18px rgba(6, 19, 61, 0.06);
+}
+
+.moduleprogress-headline {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.moduleprogress-headline span {
+    width: 4px;
+    height: 52px;
+    border-radius: 999px;
+    background: var(--moduleprogress-yellow);
+    display: block;
+}
+
+.moduleprogress-title {
+    font-size: 28px;
+    line-height: 1.05;
+    font-weight: 800;
+    color: var(--moduleprogress-navy);
+    letter-spacing: -0.03em;
+}
+
+.moduleprogress-subtitle {
+    margin-top: 4px;
+    font-size: 15px;
+    color: var(--moduleprogress-muted);
+}
+
+.moduleprogress-gauge-wrap {
+    position: relative;
+    height: 150px;
+    margin-top: -4px;
+}
+
+.moduleprogress-gauge-wrap canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.moduleprogress-percent {
+    position: absolute;
+    left: 50%;
+    top: 74%;
+    transform: translate(-50%, -50%);
+    font-size: 42px;
+    line-height: 1;
+    font-weight: 900;
+    color: var(--moduleprogress-navy);
+    letter-spacing: -0.05em;
+}
+
+.moduleprogress-percent small {
+    font-size: 26px;
+}
+
+.moduleprogress-middle {
+    border-left: 1px solid var(--moduleprogress-border);
+    border-right: 1px solid var(--moduleprogress-border);
+    padding: 0 22px;
+}
+
+.moduleprogress-status strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--moduleprogress-navy);
+}
+
+.moduleprogress-status span {
+    display: block;
+    margin-top: 4px;
+    font-size: 15px;
+    color: var(--moduleprogress-muted);
+}
+
+.moduleprogress-next {
+    margin-top: 14px;
+    font-size: 18px;
+    color: var(--moduleprogress-navy);
+}
+
+.moduleprogress-next strong {
+    color: var(--moduleprogress-navy);
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+}
+
+.moduleprogress-progressbar {
+    height: 10px;
+    background: #E7E9ED;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.moduleprogress-progressbar div {
+    height: 100%;
+    background: var(--moduleprogress-yellow);
+    border-radius: 999px;
+    transition: width 0.8s ease;
+}
+
+.moduleprogress-recommendation {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-left: 4px solid var(--moduleprogress-yellow);
+    background: var(--moduleprogress-soft);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--moduleprogress-muted);
+}
+
+.moduleprogress-recommendation strong {
+    display: block;
+    color: var(--moduleprogress-navy);
+    margin-bottom: 3px;
+}
+
+.moduleprogress-recommendation span {
+    display: block;
+    line-height: 1.35;
+}
+
+.moduleprogress-badge-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--moduleprogress-navy);
+    margin-bottom: 12px;
+}
+
+.moduleprogress-badges {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.moduleprogress-badge {
+    flex: 1;
+    text-align: center;
+    border: 1px solid var(--moduleprogress-border);
+    border-radius: 12px;
+    padding: 10px 6px;
+    background: #FFFFFF;
+}
+
+.moduleprogress-badge-icon {
+    width: 34px;
+    height: 34px;
+    margin: 0 auto 6px;
+    border-radius: 999px;
+    background: #EEF0F3;
+    color: var(--moduleprogress-navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+}
+
+.moduleprogress-badge.unlocked .moduleprogress-badge-icon {
+    background: var(--moduleprogress-yellow);
+    color: var(--moduleprogress-navy);
+}
+
+.moduleprogress-badge.locked {
+    opacity: 0.55;
+}
+
+.moduleprogress-badge-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--moduleprogress-navy);
+}
+
+.moduleprogress-badge-threshold {
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--moduleprogress-muted);
+}
+
+/* Leaderboard */
+
+.moduleprogress-leaderboard {
+    grid-column: 1 / -1;
+    margin-top: 14px;
+    padding: 18px;
+    border-radius: 18px;
+    background: var(--moduleprogress-navy);
+    color: #FFFFFF;
+}
+
+.moduleprogress-leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.moduleprogress-leaderboard-header strong {
+    display: block;
+    font-size: 19px;
+    font-weight: 900;
+    color: #FFFFFF;
+}
+
+.moduleprogress-leaderboard-header span {
+    display: block;
+    margin-top: 4px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.78);
+}
+
+.moduleprogress-own-rank {
+    background: var(--moduleprogress-yellow);
+    color: var(--moduleprogress-navy);
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-weight: 900;
+    font-size: 17px;
+    white-space: nowrap;
+}
+
+.moduleprogress-leaderboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.8fr);
+    gap: 18px;
+    align-items: stretch;
+}
+
+.moduleprogress-rank-list {
+    display: grid;
+    gap: 8px;
+}
+
+.moduleprogress-rank-row {
+    display: grid;
+    grid-template-columns: 62px 1fr 82px;
+    gap: 12px;
+    align-items: center;
+    padding: 11px 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.10);
+    color: #FFFFFF;
+    font-size: 15px;
+}
+
+.moduleprogress-rank-row.isme {
+    background: var(--moduleprogress-yellow);
+    color: var(--moduleprogress-navy);
+    font-weight: 900;
+}
+
+.moduleprogress-rank-place,
+.moduleprogress-rank-score {
+    font-weight: 900;
+}
+
+.moduleprogress-rank-name {
+    font-weight: 700;
+}
+
+.moduleprogress-rank-score {
+    text-align: right;
+}
+
+.moduleprogress-rank-divider {
+    text-align: center;
+    color: rgba(255,255,255,0.7);
+    font-weight: 900;
+}
+
+.moduleprogress-ranking-coach {
+    background: var(--moduleprogress-yellow);
+    color: var(--moduleprogress-navy);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.moduleprogress-coach-label {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.75;
+}
+
+.moduleprogress-coach-title {
+    margin-top: 8px;
+    font-size: 28px;
+    line-height: 1.1;
+    font-weight: 900;
+}
+
+.moduleprogress-coach-message {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.45;
+    font-weight: 600;
+}
+
+.moduleprogress-coach-goal {
+    margin-top: 16px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: var(--moduleprogress-navy);
+    color: #FFFFFF;
+    font-weight: 900;
+    text-align: center;
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+    .moduleprogress-widget {
+        grid-template-columns: 1fr;
+    }
+
+    .moduleprogress-middle {
+        border-left: none;
+        border-right: none;
+        border-top: 1px solid var(--moduleprogress-border);
+        border-bottom: 1px solid var(--moduleprogress-border);
+        padding: 16px 0;
+    }
+
+    .moduleprogress-gauge-wrap {
+        max-width: 360px;
+    }
+}
+
+@media (max-width: 900px) {
+    .moduleprogress-leaderboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .moduleprogress-leaderboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
