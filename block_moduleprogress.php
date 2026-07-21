@@ -263,7 +263,37 @@ class block_moduleprogress extends block_base {
 
         return empty($courseids) ? [$currentcourseid] : array_values(array_unique($courseids));
     }
+    
+public function get_content() {
+    if ($this->content !== null) {
+        return $this->content;
+    }
 
+    $this->content = new stdClass();
+
+    // Toggle-Button und Container-Struktur
+    $html = '
+    <div class="moduleprogress-wrapper">
+        <button type="button" class="btn btn-sm btn-outline-secondary mb-2 toggle-moduleprogress-btn" id="toggle-block-btn">
+            <i class="fa fa-chevron-up toggle-icon"></i> <span class="toggle-text">Modulfortschritt ausblenden</span>
+        </button>
+        <div id="moduleprogress-content-body" class="moduleprogress-content">
+    ';
+
+    // ... [Hier kommt deine bisherige Logik / Template-Ausgabe hin] ...
+
+    $html .= '
+        </div>
+    </div>
+    ';
+
+    // JavaScript für die Ein-/Ausklapp-Logik einbinden
+    $PAGE->requires->js_call_amd('block_moduleprogress/gauge', 'initToggle');
+
+    $this->content->text = $html;
+    return $this->content;
+}
+    
  private function get_leaderboard_html(int $currentuserid, array $courseids, int $maxrows): string {
     global $DB;
 
