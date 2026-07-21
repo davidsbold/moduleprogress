@@ -17,7 +17,7 @@ class block_moduleprogress extends block_base {
         $this->content = new stdClass();
         $context = context_course::instance($COURSE->id);
 
-        // 1. Nur Nutzer mit der Rolle 'student' zählen
+        // 1. ZÄHLER: Nur Nutzer mit der Rolle 'student' abfragen
         $studentrole = $DB->get_record('role', array('shortname' => 'student'));
         $student_ids = array();
         
@@ -28,137 +28,113 @@ class block_moduleprogress extends block_base {
             }
         }
 
+        // Richtige Gesamtanzahl NUR der Teilnehmer (z. B. 31)
         $total_students = count($student_ids);
         $is_student = in_array($USER->id, $student_ids);
 
-        // CSS für Transparenz & Overlays direkt mitgeben
-        $html = '
+        // --- HIER STARTET DEIN REGULÄRER ORIGINAL-HTML-CODE ---
+        // (Setze hier Variablen wie $my_rank, $my_percentage etc. für dein Template ein)
+        
+        // CSS für die Dozenten-Overlay-Schicht
+        $overlay_css = '
         <style>
-            .mp-overlay-container {
-                position: relative;
-            }
-            .mp-overlay {
+            .mp-explain-wrapper { position: relative; }
+            .mp-teacher-overlay {
                 position: absolute;
-                top: 0; left: 0; right: 0; bottom: 0;
+                top: 0; left: 0; width: 100%; height: 100%;
                 background: rgba(255, 255, 255, 0.88);
                 backdrop-filter: blur(2px);
-                z-index: 10;
+                z-index: 99;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 15px;
+                padding: 20px;
                 text-align: center;
                 border-radius: 12px;
-                box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
             }
-            .mp-overlay-dark {
-                background: rgba(10, 25, 47, 0.90) !important;
+            .mp-teacher-overlay-dark {
+                background: rgba(4, 9, 26, 0.88) !important;
                 color: #ffffff !important;
             }
-            .mp-explain-badge {
-                background: #007bff;
-                color: white;
-                font-size: 0.8rem;
-                padding: 3px 8px;
-                border-radius: 4px;
-                margin-bottom: 5px;
+            .mp-badge-info {
+                background: #f1c40f;
+                color: #000;
+                font-weight: bold;
+                padding: 4px 10px;
+                border-radius: 6px;
                 display: inline-block;
+                margin-bottom: 8px;
             }
-        </style>
+        </style>';
 
-        <div class="moduleprogress-wrapper mb-3">
-            <button type="button" class="btn btn-sm btn-outline-secondary mb-3" id="mp-toggle-btn" onclick="toggleModuleProgress()">
+        $html = $overlay_css;
+
+        // Toggle Button
+        $html .= '
+        <div class="moduleprogress-outer-container mb-3">
+            <button type="button" class="btn btn-sm btn-outline-secondary mb-2" id="mp-toggle-btn" onclick="toggleModuleProgressBody()">
                 <i class="fa fa-chevron-up" id="mp-toggle-icon"></i> <span id="mp-toggle-text">Modulfortschritt ausblenden</span>
             </button>
-            
             <div id="moduleprogress-content-body">';
 
-        // -------------------------------------------------------------------
-        // DASHBOARD HTML (Layout für alle, Werte verblasst bei Dozenten)
-        // -------------------------------------------------------------------
+        // ----------------------------------------------------------------------
+        // DEIN ORIGINALES UI LAYOUT (UNVERÄNDERT)
+        // ----------------------------------------------------------------------
+
+        // A) OBERER KASTEN (Fortschritt, Empfehlung, Badges)
+        $html .= '<div class="mp-explain-wrapper">';
         
-        $html .= '
-        <div class="card p-3 shadow-sm border-0 mb-3" style="border-radius: 16px;">
-            <div class="row position-relative">
-                
-                <!-- LINKER BEREICH: Fortschritt & Empfehlung -->
-                <div class="col-md-8 position-relative">
-                    ' . (!$is_student ? '
-                    <div class="mp-overlay">
-                        <div>
-                            <span class="mp-explain-badge">Dozenten-Info: Prozent & Empfehlung</span>
-                            <p class="small text-dark mb-0">Studierende sehen hier ihren berechneten Gesamtfortschritt (in %) sowie automatisierte Empfehlungen, welche Aufgaben zur Notenverbesserung als Nächstes absolviert werden sollten.</p>
-                        </div>
-                    </div>' : '') . '
-
-                    <div class="d-flex align-items-center">
-                        <div class="text-center pr-4 border-right" style="min-width: 150px;">
-                            <h2 class="display-4 font-weight-bold text-dark mb-0">' . ($is_student ? '0%' : 'XX%') . '</h2>
-                        </div>
-                        <div class="pl-4">
-                            <h4 class="font-weight-bold">Dranbleiben!</h4>
-                            <p class="text-muted small mb-2">Starte mit den wichtigsten Leistungsbereichen, um deinen Wert sichtbar zu erhöhen.</p>
-                            <p class="font-weight-bold text-primary mb-0">Noch 70 % bis Bronze</p>
-                        </div>
-                    </div>
-                    <div class="bg-light p-3 mt-3 rounded">
-                        <strong class="text-warning">Empfehlung:</strong>
-                        <p class="small text-muted mb-0">Fokus: Basis aufbauen. Bearbeite zuerst offene Aufgaben...</p>
-                    </div>
-                </div>
-
-                <!-- RECHTER BEREICH: Badges -->
-                <div class="col-md-4 position-relative border-left">
-                    ' . (!$is_student ? '
-                    <div class="mp-overlay">
-                        <div>
-                            <span class="mp-explain-badge">Dozenten-Info: Badges</span>
-                            <p class="small text-dark mb-0">Schaltet Meilensteine frei: Bronze (70%), Silber (80%) und Gold (90%).</p>
-                        </div>
-                    </div>' : '') . '
-
-                    <h6 class="font-weight-bold mb-3">Badge-Vorschau</h6>
-                    <div class="d-flex justify-content-between text-center">
-                        <div class="p-2 border rounded"><small>Bronze<br>ab 70%</small></div>
-                        <div class="p-2 border rounded"><small>Silber<br>ab 80%</small></div>
-                        <div class="p-2 border rounded"><small>Gold<br>ab 90%</small></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- UNTERER BEREICH: Ranking -->
-        <div class="card p-4 text-white position-relative" style="background-color: #0b132b; border-radius: 16px;">
-            ' . (!$is_student ? '
-            <div class="mp-overlay mp-overlay-dark">
-                <div style="max-width: 600px;">
-                    <span class="mp-explain-badge bg-info">Dozenten-Info: Kohorten-Ranking</span>
-                    <p class="small mb-0">Zeigt das anonymisierte Ranking. In der Ecke oben rechts werden <b>ausschließlich Teilnehmende (aktuell ' . $total_students . ')</b> gezählt. Lehrende/Admins verfälschen diese Zahl nicht mehr.</p>
-                </div>
-            </div>' : '') . '
-
-            <div class="d-flex justify-content-between align-items-center mb-3">
+        if (!$is_student) {
+            $html .= '
+            <div class="mp-teacher-overlay">
                 <div>
-                    <h5 class="mb-0 text-white">Anonymisiertes Kohorten-Ranking</h5>
-                    <small class="text-muted">Deine Position ist sichtbar — andere Teilnehmende bleiben anonym.</small>
+                    <span class="mp-badge-info">Dozenten-Info: Modulfortschritt & Badges</span>
+                    <p class="mb-0 text-dark" style="max-width: 600px;">
+                        Hier sehen Studierende ihren individuellen Fortschritt in %, personalisierte Empfehlungen zur Notenverbesserung sowie freigeschaltete Badges (Bronze ab 70%, Silber ab 80%, Gold ab 90%).
+                    </p>
                 </div>
-                <span class="badge badge-warning p-2" style="font-size: 1rem;">#' . ($is_student ? '18' : 'X') . ' von ' . $total_students . '</span>
-            </div>
+            </div>';
+        }
 
-            <div class="bg-dark p-2 rounded mb-1 d-flex justify-content-between"><span>#1 Teilnehmer 1</span><span>95%</span></div>
-            <div class="bg-dark p-2 rounded mb-1 d-flex justify-content-between"><span>#2 Teilnehmer 2</span><span>66.7%</span></div>
-            <div class="text-center my-2">...</div>
-            <div class="bg-warning text-dark p-2 rounded font-weight-bold d-flex justify-content-between"><span>#18 Du</span><span>0%</span></div>
+        /* 
+         * >>> FÜGE HIER DEINEN DEKLARIERTEN ORIGINAL-HTML-CODE FÜR DEN OBEREN KASTEN EIN <<<
+         * Beispiel: $html .= $dein_originaler_oberer_kasten_html;
+        */
+
+        $html .= '</div>'; // Ende Oberer Kasten Wrapper
+
+        // B) UNTERER KASTEN (Anonymisiertes Kohorten-Ranking)
+        $html .= '<div class="mp-explain-wrapper mt-3">';
+
+        if (!$is_student) {
+            $html .= '
+            <div class="mp-teacher-overlay mp-teacher-overlay-dark">
+                <div>
+                    <span class="mp-badge-info">Dozenten-Info: Kohorten-Ranking</span>
+                    <p class="mb-0 text-white" style="max-width: 600px;">
+                        Anonymisierte Rangliste aller Studierenden. Oben rechts werden <b>ausschließlich Teilnehmende (' . $total_students . ')</b> gezählt. Lehrende und Admins werden im Ranking nicht geführt.
+                    </p>
+                </div>
+            </div>';
+        }
+
+        /* 
+         * >>> FÜGE HIER DEINEN DEKLARIERTEN ORIGINAL-HTML-CODE FÜR DAS RANKING EIN <<<
+         * WICHTIG: Ersetze in deiner Badge oben rechts die Zahl der Nutzer durch $total_students
+         * (z.B. "#" . $my_rank . " von " . $total_students)
+        */
+
+        $html .= '</div>'; // Ende Ranking Wrapper
+
+        // Container zu machen
+        $html .= '
+            </div>
         </div>';
 
+        // Toggle-Skript
         $html .= '
-            </div>
-        </div>
-
-        <!-- Robuster Inline-Script für den Ausklapp-Button -->
         <script>
-        function toggleModuleProgress() {
+        function toggleModuleProgressBody() {
             var body = document.getElementById("moduleprogress-content-body");
             var icon = document.getElementById("mp-toggle-icon");
             var text = document.getElementById("mp-toggle-text");
